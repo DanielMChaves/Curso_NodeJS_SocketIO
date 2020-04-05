@@ -1,0 +1,25 @@
+{
+  "name": "ChatLive",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node sockets/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DanielMChaves/ChatLive.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DanielMChaves/ChatLive/issues"
+  },
+  "homepage": "https://github.com/DanielMChaves/ChatLive#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  }
+}
