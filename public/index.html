@@ -15,7 +15,18 @@
 	<!-- Socket.io Local -->
 	<script src="/socket.io/socket.io.js"></script>
 	<script>
+
+		// Conexion con el servidor
 		const socket = io.connect();
+
+		// Enviamos los datos al servidor
+		socket.emit('login_user', {user: 'admin', password: 'admin'});
+
+		// Recibimos una respuesta del servidor
+		socket.on('login_user_response', function(data){
+			alert("New user connection: " + data.user);
+		});
+
 	</script>
 </body>
 </html>

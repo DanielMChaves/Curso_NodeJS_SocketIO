@@ -77,6 +77,14 @@ app.use(express.static('public'));
 const io = socketIo.listen(server);
 
 io.on('connect', function(socket){
-	if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " New Connection, ID: " + socket.id);
+	
+	if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " New connection ID: " + socket.id);
 	if(log == "si") console.log(print);
+
+	socket.on('login_user', function(data){
+		if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " New user connection: " + data.user);
+		if(log == "si") console.log(print);
+		io.emit('login_user_response', {user: data.user})
+	});
+
 });
