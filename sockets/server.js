@@ -65,7 +65,18 @@ if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " Listening in "
 if(log == "si") console.log(print);
 
 // **********************************************************************
+//               Folders
+// **********************************************************************
+
+app.use(express.static('public'));
+
+// **********************************************************************
 //               Inicializar Socket.oi
 // **********************************************************************
 
 const io = socketIo.listen(server);
+
+io.on('connect', function(socket){
+	if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " New Connection, ID: " + socket.id);
+	if(log == "si") console.log(print);
+});

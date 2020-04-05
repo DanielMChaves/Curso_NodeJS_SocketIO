@@ -3,16 +3,19 @@
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE-edge">
-	<title></title>
+	<title>Chat Live</title>
 	<link rel="stylesheet" href="">
 </head>
 <body>
-	<!-- JQuery Web 
+	<h1>Socket.io</h1>
+	<!-- JQuery Web -->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> 
-	-->
-	<!-- JQuery Local -->
-	<script src="js/jquery-3.4.1.min.js"></script>
+	<!-- JQuery Local 
+	<script src="js/jquery-3.4.1.min.js"></script> -->
 	<!-- Socket.io Local -->
-	<script src="node_modules/socket.io-client/dist/socket.io.js"></script>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+		const socket = io.connect();
+	</script>
 </body>
 </html>
