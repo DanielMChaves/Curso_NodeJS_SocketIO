@@ -81,10 +81,18 @@ io.on('connect', function(socket){
 	if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " New connection ID: " + socket.id);
 	if(log == "si") console.log(print);
 
+	// Socket del Login
 	socket.on('login_user', function(data){
 		if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " New user connection: " + data.user);
 		if(log == "si") console.log(print);
 		io.emit('login_user_response', {user: data.user})
+	});
+
+	// Socket de Enviar Mensaje
+	socket.on('send_message', function(data){
+		if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " " + data.user + " ha enviado un mensaje");
+		if(log == "si") console.log(print);
+		io.emit('send_message_response', {message: data.message, user: data.user})
 	});
 
 });

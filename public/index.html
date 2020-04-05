@@ -7,26 +7,78 @@
 	<link rel="stylesheet" href="">
 </head>
 <body>
-	<h1>Socket.io</h1>
 	<!-- JQuery Web -->
 	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script> 
 	<!-- JQuery Local 
 	<script src="js/jquery-3.4.1.min.js"></script> -->
 	<!-- Socket.io Local -->
 	<script src="/socket.io/socket.io.js"></script>
+	<!-- Archivos Locales JS -->
+	<script src="functions_sockets.js"></script>
+
+	<h3>Login</h3>
+	<form accept-charset="utf-8" id="form_login">
+		<input type=text name="" id="user" placeholder="User" value="">
+		<input type=text name="" id="password" placeholder="Password" value="">
+		<input type="button" value="Login" onclick="login()">
+	</form>
+
+	<br>
+	<br>
+	<br>
+
+	<h3>Chat</h3>
+	<div id="chat">
+		<p><strong>Welcome to ChatLive</strong></p>
+	</div>
+
+	<br>
+	
+	<div style="display: flex; justify-content: flex-start; align-items: center">
+		<textarea style="width: 500px" id=message placeholder="Message"></textarea>
+		<button type="" id="send_message" onclick="send_message()" style="height: 100%; background: green; color: white; padding: 10px">Send</button>
+	</div>
+
+	<hr>
+	<style>
+		#chat {
+			width: 50%; 
+			background: #da2724; 
+			border: solid 2px black
+		}
+		p {
+			background: white;
+			padding: 5px;
+			border: solid 1px black;
+			margin: 10px;
+			border-radius: 5px
+		}
+	</style>
 	<script>
 
-		// Conexion con el servidor
-		const socket = io.connect();
+		function login(){
+	
+			// Obtenemos los datos del form
+			user = $('#form_login #user').val();
+			password = $('#form_login #password').val();
 
-		// Enviamos los datos al servidor
-		socket.emit('login_user', {user: 'admin', password: 'admin'});
+			// Enviamos los datos al servidor
+			login_socket(user, password);
+		}
 
-		// Recibimos una respuesta del servidor
-		socket.on('login_user_response', function(data){
-			alert("New user connection: " + data.user);
-		});
+		function send_message(){
 
+			// Obtenemos los datos del chat
+			message = $('#message').val();
+
+			// Enviamos los datos al servidor
+			send_message_socket(message, user);
+
+			// Limpiamos el textarea
+			$("#message").val("");
+
+		}
+		
 	</script>
 </body>
 </html>
