@@ -7,7 +7,7 @@ socket.on('login_user_response', function(data){
 });
 
 socket.on('send_message_response', function(data){
-	$('#chat').append('<p><strong>' + data.user + ': </strong>' + data.message + '</p>');
+	$('#chat').append('<p><strong>' + data.user + ': </strong><br>' + data.message + '</p>');
 });
 
 // **********************************************************************
@@ -18,6 +18,6 @@ function login_socket(user, password){
 	socket.emit('login_user', {user: user, password: password});
 }
 
-function send_message_socket(message, user){
-	socket.emit('send_message', {message: message, user: user});
+function send_message_socket(message, user, toSend = null){
+	socket.emit('send_message', {message: message, user: user, toSend: toSend});
 }

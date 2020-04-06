@@ -71,6 +71,15 @@ if(log == "si") console.log(print);
 app.use(express.static('public'));
 
 // **********************************************************************
+//               Base de Datos del Servidor
+// **********************************************************************
+
+// socketID = userID
+var UsersOnSocket = new Array();
+// userID = {socketID1, socketID2}
+var SocketsOnUser = new Array();
+
+// **********************************************************************
 //               Inicializar Socket.oi
 // **********************************************************************
 
@@ -83,16 +92,94 @@ io.on('connect', function(socket){
 
 	// Socket del Login
 	socket.on('login_user', function(data){
-		if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " New user connection: " + data.user);
+		
+		// Obtenemos los datos
+		socketId = socket.id;
+		userId = data.user;
+
+		// Guardamos el valor data.user en la clave socket.id
+		UsersOnSocket[socketId] = userId;
+
+		if(SocketsOnUser[userId] == null){
+			SocketsOnUser[userId] = new Array();
+		}
+
+		SocketsOnUser[userId].push(socketId);
+
+		// Prints de Control
+		if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " New user connection: " + userId);
 		if(log == "si") console.log(print);
+
+		if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " Users by Socket:");
+		if(log == "si") console.log(UsersOnSocket);
+		if(log == "si") console.log(print);
+
+		if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " Sockets by User:");
+		if(log == "si") console.log(SocketsOnUser);
+		if(log == "si") console.log(print);
+
+		if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " Total users:");
+		if(log == "si") console.log(Object.keys(SocketsOnUser).length);
+		if(log == "si") console.log(print);
+
 		io.emit('login_user_response', {user: data.user})
 	});
 
 	// Socket de Enviar Mensaje
 	socket.on('send_message', function(data){
+
 		if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " " + data.user + " ha enviado un mensaje");
 		if(log == "si") console.log(print);
-		io.emit('send_message_response', {message: data.message, user: data.user})
+
+		toSend = data.toSend;
+
+		if(toSend == null){
+			io.emit('send_message_response', {message: data.message, user: data.user})
+		}
+		else{
+			socketsUser = SocketsOnUser[toSend];
+
+			// Enviamos el mensaje a todos sus sockets
+			for(var i = 0; i < socketsUser.length; i++){
+				io.to(socketsUser[i]).emit('send_message_response', {message: data.message, user: data.user})
+			}
+
+			io.to(socket.id).emit('send_message_response', {message: data.message, user: data.user})
+		}
+		
+	});
+
+	// Desconexion
+	socket.on('disconnect', function(){
+
+		// Obtenemos los datos
+		socketId = socket.id;
+
+		if(UsersOnSocket[socketId]){
+			// Obtenemos el userId a traves del socketId
+			userId = UsersOnSocket[socketId];
+
+			// Borramos el registro de dicho socketId
+			delete UsersOnSocket[socketId];
+			
+			// Borramos el socketId dentro de las conexiones del userId
+			arrayIds = SocketsOnUser[userId];
+
+			for(var i = 0; i < arrayIds.length; i++){
+				if(arrayIds[i] == socketId)
+					idToDelete = i;
+			}
+
+			SocketsOnUser[userId].splice(idToDelete,1);
+
+			// Si no tiene más sockets, lo borramos
+			if(SocketsOnUser[userId].length < 1)
+				delete SocketsOnUser[userId];
+
+			if(log == "si") console.log(FgGreen + "[SERVER INFO]" + Reset + " Lost user connection: " + userId);
+			if(log == "si") console.log(print);
+		}		
+
 	});
 
 });

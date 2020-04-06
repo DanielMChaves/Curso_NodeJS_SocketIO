@@ -27,7 +27,7 @@
 	<br>
 	<br>
 
-	<h3>Chat</h3>
+	<h3>Global Chat</h3>
 	<div id="chat">
 		<p><strong>Welcome to ChatLive</strong></p>
 	</div>
@@ -36,6 +36,7 @@
 	
 	<div style="display: flex; justify-content: flex-start; align-items: center">
 		<textarea style="width: 500px" id=message placeholder="Message"></textarea>
+		<input type="text" id="toSend" name="" placeholder="To Send">
 		<button type="" id="send_message" onclick="send_message()" style="height: 100%; background: green; color: white; padding: 10px">Send</button>
 	</div>
 
@@ -70,9 +71,13 @@
 
 			// Obtenemos los datos del chat
 			message = $('#message').val();
+			toSend = $('#toSend').val();
 
 			// Enviamos los datos al servidor
-			send_message_socket(message, user);
+			if(toSend == '')
+				send_message_socket(message, user);
+			else
+				send_message_socket(message, user, toSend);
 
 			// Limpiamos el textarea
 			$("#message").val("");
